@@ -1,14 +1,8 @@
-#include <SFML/Graphics.hpp>
-#include <noise/noise.h>
-#include <iostream>
+#include "ElectricDischarge.h"
 
 int main()
 {
-	noise::module::Perlin myModule;
-
-	double v = myModule.GetValue(0.5, 0.5, 0.5);
-
-	std::cout << v << std::endl;
-	system("pause");
-	return 0;
+	ElectricDischarge electricDischarge;
+	electricDischarge.run();
+	return EXIT_SUCCESS;
 }
