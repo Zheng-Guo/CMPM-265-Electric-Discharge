@@ -4,7 +4,7 @@
 #include <ctime>
 #include <SFML\Graphics.hpp>
 #include "MainMenu.h"
-#include "Constants.h"
+#include "ElectricDischargeEditor.h"
 
 using namespace sf;
 using namespace std;
@@ -38,6 +38,16 @@ void ElectricDischarge::run()
 			if (event.type == Event::Closed)
 				window.close();
 			currentForm->processEvent(event);
+			if (currentDisplay != currentForm->next())
+			{
+				currentDisplay = currentForm->next();
+				switch (currentDisplay)
+				{
+				case Display::Menu: currentForm = make_shared<MainMenu>(Window_Width, Window_Height); break;
+				case Display::Editor: currentForm = make_shared<ElectricDischargeEditor>(Window_Width, Window_Height); break;
+				//case Display::LightningStorm: currentForm = make_shared<DissolvingEffectDisplay>(Window_Width, Window_Height); break;
+				}
+			}
 		}
 		time3 = clock.getElapsedTime();
 		time2 = time3 - time1;

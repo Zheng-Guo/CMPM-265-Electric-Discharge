@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ElectricDischarge.h" />
+    <ClInclude Include="ElectricDischargeEditor.h" />
     <ClInclude Include="Form.h" />
     <ClInclude Include="MainMenu.h" />
   </ItemGroup>
