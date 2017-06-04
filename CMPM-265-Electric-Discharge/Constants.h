@@ -11,3 +11,4 @@ const int Menu_Instruction_Y = 700;
 const int Instruction_Character_Size = 20;
 const float PI = 3.14159265;
 const float Degree_To_Radian = PI / 180;
+enum Display { Menu, Editor, LightningStorm };
