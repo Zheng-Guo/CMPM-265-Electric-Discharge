@@ -16,7 +16,7 @@ private:
 public:
 	ElectricDischargeEditor(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
 	nextDisplay(Display::Editor),
-	electricArc(Vector2f(100,400),0,600,8)
+	electricArc(Vector2f(400,50),90,600,8)
 	{
 
 		font.loadFromFile("Tinos-Regular.ttf");

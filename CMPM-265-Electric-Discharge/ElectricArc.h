@@ -44,11 +44,15 @@ void ElectricArc::buildArc()
 	}
 	else
 	{
-		float x = sourcePoint.x;
-		while(x-sourcePoint.x<=length)
+		float x = 0;
+		while(x<=length)
 		{
-			arcPath.push_back(Vector2f(x, sourcePoint.y));
+			arcPath.push_back(Vector2f(x, 0));
 			x += 1;
+		}
+		Matrix rotationMatrix(cos(direction*Degree_To_Radian), -sin(direction*Degree_To_Radian), sin(direction*Degree_To_Radian), cos(direction*Degree_To_Radian));
+		for (int i = 0; i < arcPath.size(); ++i) {
+			arcPath[i] = rotationMatrix*arcPath[i]+sourcePoint;
 		}
 	}
 }
