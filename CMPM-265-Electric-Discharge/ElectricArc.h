@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <noise/noise.h>
 #include "Matrix.h"
@@ -20,6 +21,7 @@ private:
 	bool applyNoise;
 	int branchingProbability;
 	vector<shared_ptr<ElectricArc>> branches;
+	module::Perlin noiseGenerator;
 public:
 	ElectricArc(Vector2f s = Vector2f(0, 0), float d=0,float l=10,float a = 1) :sourcePoint(s),
 	direction(d),
@@ -33,6 +35,7 @@ public:
 	void buildArc();
 	void setApplyNoise(bool b) { applyNoise = b; }
 	void setBranchingProbability(int i) { branchingProbability = i; }
+	void setNoiseSeed(int i) { noiseGenerator.SetSeed(i); }
 	void draw(RenderWindow &window);
 };
 
@@ -47,8 +50,9 @@ void ElectricArc::buildArc()
 		float x = 0;
 		while(x<=length)
 		{
-			arcPath.push_back(Vector2f(x, 0));
+			arcPath.push_back(Vector2f(x, noiseGenerator.GetValue(x/200,0.5,0)*100));
 			x += 1;
+			//std::cout << noiseGenerator.GetValue(x, 1, 0) << std::endl;
 		}
 		Matrix rotationMatrix(cos(direction*Degree_To_Radian), -sin(direction*Degree_To_Radian), sin(direction*Degree_To_Radian), cos(direction*Degree_To_Radian));
 		for (int i = 0; i < arcPath.size(); ++i) {
