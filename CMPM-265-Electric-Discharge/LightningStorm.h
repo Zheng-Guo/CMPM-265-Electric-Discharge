@@ -6,17 +6,17 @@
 using namespace sf;
 using namespace std;
 
-class ElectricArcDemo: public Form
+class LightningStorm: public Form
 {
 private:
-	Text instruction1, instruction2;
+	Text instruction2;
 	Font font;
 	Display nextDisplay;
 	ElectricArc electricArc;
 public:
-	ElectricArcDemo(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
-	nextDisplay(Display::Demo),
-	electricArc(Vector2f(400,50),90,600,5,0)
+	LightningStorm(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
+	nextDisplay(Display::Storm),
+	electricArc(Vector2f(400, 50), 90, 600, 5, 0, false,Storm_Duration,Storm_Fading_Rate)
 	{
 		srand(time(NULL));
 		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
@@ -24,11 +24,6 @@ public:
 		electricArc.setNoiseSeed(rand());
 		electricArc.buildArc();
 		font.loadFromFile("Tinos-Regular.ttf");
-		instruction1.setFont(font);
-		instruction1.setString("Press Enter to generate another electric arc.");
-		instruction1.setCharacterSize(Instruction_Character_Size);
-		instruction1.setFillColor(Color::Red);
-		instruction1.setPosition(Menu_Instruction_X, Menu_Instruction_Y);
 		instruction2.setFont(font);
 		instruction2.setString("Press Escape to return to menu.");
 		instruction2.setCharacterSize(Instruction_Character_Size);
@@ -41,33 +36,25 @@ public:
 	virtual Display next() override;
 };
 
-void ElectricArcDemo::processEvent(Event event)
+void LightningStorm::processEvent(Event event)
 {
-	if (Keyboard::isKeyPressed(Keyboard::Return)) {
-		electricArc.setNoiseSeed(rand());
-		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
-		electricArc.setAmplitude(amplitude);
-		electricArc.buildArc();
-	}
 	if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 		nextDisplay = Display::Menu;
 	}
 }
 
-void ElectricArcDemo::update(float deltaTime)
+void LightningStorm::update(float deltaTime)
 {
-	
+	electricArc.update(deltaTime);
 }
 
-void ElectricArcDemo::render(RenderWindow& window)
+void LightningStorm::render(RenderWindow& window)
 {
 	electricArc.draw(window);
-	window.draw(instruction1);
 	window.draw(instruction2);
 }
 
-Display ElectricArcDemo::next()
+Display LightningStorm::next()
 {
 	return nextDisplay;
 }
-

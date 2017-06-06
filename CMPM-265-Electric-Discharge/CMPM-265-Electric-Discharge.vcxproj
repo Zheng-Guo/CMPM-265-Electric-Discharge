@@ -157,6 +157,7 @@
     <ClInclude Include="ElectricDischarge.h" />
     <ClInclude Include="ElectricArcDemo.h" />
     <ClInclude Include="Form.h" />
+    <ClInclude Include="LightningStorm.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Matrix.h" />
   </ItemGroup>

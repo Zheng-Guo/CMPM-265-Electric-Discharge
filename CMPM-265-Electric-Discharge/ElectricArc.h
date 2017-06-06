@@ -42,6 +42,7 @@ public:
 	}
 	void buildArc();
 	void setNoiseSeed(int i) { noiseGenerator.SetSeed(i); }
+	void setAmplitude(float a) { amplitude = a; }
 	void draw(RenderWindow &window);
 	void update(float deltaTime);
 };
@@ -70,7 +71,7 @@ void ElectricArc::buildArc()
 			float branchLengthDecrease = (rand() % Branch_Length_Decrease_Margin + Branch_Length_Decrease_Base) / 10.f;
 			float branchThicknessDecrease = (rand() % Branch_Thickness_Decrease_Margin + Branch_Thickness_Decrease_Base) / 10.f;
 			int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
-			shared_ptr<ElectricArc> arc = make_shared<ElectricArc>(arcPath[i], branchDirection, length*branchLengthDecrease, arcThickness*branchThicknessDecrease,amplitude);
+			shared_ptr<ElectricArc> arc = make_shared<ElectricArc>(arcPath[i], branchDirection, length*branchLengthDecrease, arcThickness*branchThicknessDecrease,amplitude,persistent,duration,fadingRate);
 			arc->setNoiseSeed(time(NULL));
 			arc->buildArc();
 			branches.push_back(arc);
@@ -106,7 +107,12 @@ void ElectricArc::update(float deltaTime)
 		duration -= deltaTime;
 		if(duration<=0)
 		{
-			color = Color(color.r, color.g, color.b, color.a - fadingRate);
+			int alpha = color.a - fadingRate*deltaTime;
+			if (alpha < 0)
+				alpha = 0;
+			color = Color(color.r, color.g, color.b, alpha);
 		}
+		for (shared_ptr<ElectricArc> a : branches)
+			a->update(deltaTime);
 	}
 }

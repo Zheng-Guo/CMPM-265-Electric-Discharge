@@ -27,7 +27,7 @@ public:
 		text.setCharacterSize(Menu_Option_Character_Size);
 		text.setPosition(Menu_Option_X, Menu_Option_Initial_Y + optionText.size()*Menu_Option_Interval);
 		optionText.push_back(text);
-		text.setString("LightningStorm");
+		text.setString("Lightning Storm");
 		text.setPosition(Menu_Option_X, Menu_Option_Initial_Y + optionText.size()*Menu_Option_Interval);
 		optionText.push_back(text);
 		instruction1.setFont(font);
@@ -61,7 +61,7 @@ void MainMenu::processEvent(Event event)
 		if (currentSelection == 0)
 			nextDisplay = Display::Demo;
 		if (currentSelection == 1)
-			nextDisplay = Display::LightningStorm;
+			nextDisplay = Display::Storm;
 	}
 }
 

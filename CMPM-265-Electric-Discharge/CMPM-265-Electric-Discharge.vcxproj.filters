@@ -41,5 +41,8 @@
     <ClInclude Include="ElectricArcDemo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LightningStorm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include <SFML\Graphics.hpp>
 #include "MainMenu.h"
 #include "ElectricArcDemo.h"
+#include "LightningStorm.h"
 
 using namespace sf;
 using namespace std;
@@ -45,7 +46,7 @@ void ElectricDischarge::run()
 				{
 				case Display::Menu: currentForm = make_shared<MainMenu>(Window_Width, Window_Height); break;
 				case Display::Demo: currentForm = make_shared<ElectricArcDemo>(Window_Width, Window_Height); break;
-				//case Display::LightningStorm: currentForm = make_shared<DissolvingEffectDisplay>(Window_Width, Window_Height); break;
+				case Display::Storm: currentForm = make_shared<LightningStorm>(Window_Width, Window_Height); break;
 				}
 			}
 		}
