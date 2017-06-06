@@ -155,7 +155,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ElectricArc.h" />
     <ClInclude Include="ElectricDischarge.h" />
-    <ClInclude Include="ElectricDischargeEditor.h" />
+    <ClInclude Include="ElectricArcDemo.h" />
     <ClInclude Include="Form.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Matrix.h" />

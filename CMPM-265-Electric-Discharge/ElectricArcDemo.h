@@ -6,7 +6,7 @@
 using namespace sf;
 using namespace std;
 
-class ElectricDischargeEditor: public Form
+class ElectricArcDemo: public Form
 {
 private:
 	Text instruction1, instruction2;
@@ -14,9 +14,9 @@ private:
 	Display nextDisplay;
 	ElectricArc electricArc;
 public:
-	ElectricDischargeEditor(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
-	nextDisplay(Display::Editor),
-	electricArc(Vector2f(400,50),90,600,5)
+	ElectricArcDemo(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
+	nextDisplay(Display::Demo),
+	electricArc(Vector2f(400,50),90,600,5,80)
 	{
 
 		font.loadFromFile("Tinos-Regular.ttf");
@@ -37,7 +37,7 @@ public:
 	virtual Display next() override;
 };
 
-void ElectricDischargeEditor::processEvent(Event event)
+void ElectricArcDemo::processEvent(Event event)
 {
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
 
@@ -50,19 +50,19 @@ void ElectricDischargeEditor::processEvent(Event event)
 	}
 }
 
-void ElectricDischargeEditor::update(float deltaTime)
+void ElectricArcDemo::update(float deltaTime)
 {
 	
 }
 
-void ElectricDischargeEditor::render(RenderWindow& window)
+void ElectricArcDemo::render(RenderWindow& window)
 {
 	electricArc.draw(window);
 	window.draw(instruction1);
 	window.draw(instruction2);
 }
 
-Display ElectricDischargeEditor::next()
+Display ElectricArcDemo::next()
 {
 	return nextDisplay;
 }

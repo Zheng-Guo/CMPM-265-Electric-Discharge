@@ -32,13 +32,13 @@
     <ClInclude Include="MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ElectricDischargeEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ElectricArc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectricArcDemo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

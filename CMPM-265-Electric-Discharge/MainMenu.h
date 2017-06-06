@@ -23,7 +23,7 @@ public:
 		font.loadFromFile("Tinos-Regular.ttf");
 		Text text;
 		text.setFont(font);
-		text.setString("Electric Discharge Editor");
+		text.setString("Electric Discharge Demo");
 		text.setCharacterSize(Menu_Option_Character_Size);
 		text.setPosition(Menu_Option_X, Menu_Option_Initial_Y + optionText.size()*Menu_Option_Interval);
 		optionText.push_back(text);
@@ -59,7 +59,7 @@ void MainMenu::processEvent(Event event)
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Return)) {
 		if (currentSelection == 0)
-			nextDisplay = Display::Editor;
+			nextDisplay = Display::Demo;
 		if (currentSelection == 1)
 			nextDisplay = Display::LightningStorm;
 	}

@@ -4,7 +4,7 @@
 #include <ctime>
 #include <SFML\Graphics.hpp>
 #include "MainMenu.h"
-#include "ElectricDischargeEditor.h"
+#include "ElectricArcDemo.h"
 
 using namespace sf;
 using namespace std;
@@ -44,7 +44,7 @@ void ElectricDischarge::run()
 				switch (currentDisplay)
 				{
 				case Display::Menu: currentForm = make_shared<MainMenu>(Window_Width, Window_Height); break;
-				case Display::Editor: currentForm = make_shared<ElectricDischargeEditor>(Window_Width, Window_Height); break;
+				case Display::Demo: currentForm = make_shared<ElectricArcDemo>(Window_Width, Window_Height); break;
 				//case Display::LightningStorm: currentForm = make_shared<DissolvingEffectDisplay>(Window_Width, Window_Height); break;
 				}
 			}
