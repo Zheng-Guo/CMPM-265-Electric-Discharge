@@ -45,6 +45,7 @@ public:
 	void setAmplitude(float a) { amplitude = a; }
 	void draw(RenderWindow &window);
 	void update(float deltaTime);
+	bool isVisible() const { return color.a > 0; }
 };
 
 void ElectricArc::buildArc()
@@ -70,8 +71,8 @@ void ElectricArc::buildArc()
 			branchDirection += direction;
 			float branchLengthDecrease = (rand() % Branch_Length_Decrease_Margin + Branch_Length_Decrease_Base) / 10.f;
 			float branchThicknessDecrease = (rand() % Branch_Thickness_Decrease_Margin + Branch_Thickness_Decrease_Base) / 10.f;
-			int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
-			shared_ptr<ElectricArc> arc = make_shared<ElectricArc>(arcPath[i], branchDirection, length*branchLengthDecrease, arcThickness*branchThicknessDecrease,amplitude,persistent,duration,fadingRate);
+			int branchAmplitude = rand() % Amplitude_Margin + Amplitude_Base;
+			shared_ptr<ElectricArc> arc = make_shared<ElectricArc>(arcPath[i], branchDirection, length*branchLengthDecrease, arcThickness*branchThicknessDecrease,branchAmplitude,persistent,duration,fadingRate);
 			arc->setNoiseSeed(time(NULL));
 			arc->buildArc();
 			branches.push_back(arc);
@@ -90,12 +91,6 @@ void ElectricArc::draw(RenderWindow& window)
 		c.setOutlineColor(color);
 		window.draw(c);
 	}
-	//CircleShape c(20);
-	//c.setOrigin(20, 20);
-	//c.setPosition(arcPath[0]);
-	//c.setFillColor(Color::Red);
-	//c.setOutlineColor(Color::Red);
-	//window.draw(c);
 	for (shared_ptr<ElectricArc> a : branches)
 		a->draw(window);
 }

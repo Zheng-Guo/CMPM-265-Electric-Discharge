@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <memory>
 #include <SFML\Graphics.hpp>
 #include "Form.h"
 #include "ElectricArc.h"
@@ -12,17 +14,14 @@ private:
 	Text instruction2;
 	Font font;
 	Display nextDisplay;
-	ElectricArc electricArc;
+	vector<shared_ptr<ElectricArc>> electricArcs;
+	float interval;
 public:
 	LightningStorm(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
-	nextDisplay(Display::Storm),
-	electricArc(Vector2f(400, 50), 90, 600, 5, 0, false,Storm_Duration,Storm_Fading_Rate)
+	nextDisplay(Display::Storm)
 	{
 		srand(time(NULL));
-		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
-		electricArc.setAmplitude(amplitude);
-		electricArc.setNoiseSeed(rand());
-		electricArc.buildArc();
+		interval = (rand() % Lightning_Interval_Limit) / 100.f;
 		font.loadFromFile("Tinos-Regular.ttf");
 		instruction2.setFont(font);
 		instruction2.setString("Press Escape to return to menu.");
@@ -45,12 +44,39 @@ void LightningStorm::processEvent(Event event)
 
 void LightningStorm::update(float deltaTime)
 {
-	electricArc.update(deltaTime);
+	int i = 0;
+	while(i<electricArcs.size())
+	{
+		if(electricArcs[i]->isVisible())
+		{
+			electricArcs[i]->update(deltaTime);
+			++i;
+		}
+		else
+		{
+			electricArcs.erase(electricArcs.begin()+i);
+		}
+	}
+	interval -= deltaTime;
+	if(interval<=0)
+	{
+		interval = (rand() % Lightning_Interval_Limit) / 100.f;
+		int sourceX = rand() % Lightning_X_Range + Lightning_X_Base;
+		int direction = rand() % Lightning_Direction_Range + Lightning_Direction_Base;
+		shared_ptr<ElectricArc> electricArc=make_shared<ElectricArc>(Vector2f(sourceX, Lightning_Y), direction, 600, 5, 0, false, Storm_Duration, Storm_Fading_Rate);
+		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
+		electricArc->setAmplitude(amplitude);
+		electricArc->setNoiseSeed(rand());
+		electricArc->buildArc();
+		electricArcs.push_back(electricArc);
+	}
+	
 }
 
 void LightningStorm::render(RenderWindow& window)
 {
-	electricArc.draw(window);
+	for (shared_ptr<ElectricArc> e : electricArcs)
+		e->draw(window);
 	window.draw(instruction2);
 }
 
