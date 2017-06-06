@@ -18,10 +18,12 @@ public:
 	nextDisplay(Display::Demo),
 	electricArc(Vector2f(400,50),90,600,5,80)
 	{
-
+		srand(time(NULL));
+		electricArc.setNoiseSeed(rand());
+		electricArc.buildArc();
 		font.loadFromFile("Tinos-Regular.ttf");
 		instruction1.setFont(font);
-		instruction1.setString("Press Up/Down arrow key to increase/decrease the number of particles.");
+		instruction1.setString("Press Enter to generate another electric arc.");
 		instruction1.setCharacterSize(Instruction_Character_Size);
 		instruction1.setFillColor(Color::Red);
 		instruction1.setPosition(Menu_Instruction_X, Menu_Instruction_Y);
@@ -39,11 +41,9 @@ public:
 
 void ElectricArcDemo::processEvent(Event event)
 {
-	if (Keyboard::isKeyPressed(Keyboard::Up)) {
-
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Down)) {
-
+	if (Keyboard::isKeyPressed(Keyboard::Return)) {
+		electricArc.setNoiseSeed(rand());
+		electricArc.buildArc();
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 		nextDisplay = Display::Menu;
@@ -52,7 +52,7 @@ void ElectricArcDemo::processEvent(Event event)
 
 void ElectricArcDemo::update(float deltaTime)
 {
-	
+	electricArc.update(deltaTime);
 }
 
 void ElectricArcDemo::render(RenderWindow& window)

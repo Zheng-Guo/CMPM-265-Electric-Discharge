@@ -18,7 +18,7 @@ private:
 	Display currentDisplay;
 	shared_ptr<Form> currentForm;
 public:
-	ElectricDischarge():window(VideoMode(Window_Width, Window_Height), "Particle Systems", Style::Close | Style::Titlebar)
+	ElectricDischarge():window(VideoMode(Window_Width, Window_Height), "Electric Discharge", Style::Close | Style::Titlebar)
 	{
 		window.setPosition(Vector2i(100, 100));
 		currentForm = make_shared<MainMenu>(Window_Width, Window_Height);

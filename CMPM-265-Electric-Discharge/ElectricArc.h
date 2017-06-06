@@ -19,26 +19,31 @@ private:
 	float direction, length;
 	vector<Vector2f> arcPath;
 	float arcThickness, amplitude;
-	int branchingProbability;
 	vector<shared_ptr<ElectricArc>> branches;
+	Color color;
+	bool persistent;
+	float duration;
+	int fadingRate;
 	module::Perlin noiseGenerator;
 public:
-	ElectricArc(Vector2f s = Vector2f(0, 0), float d=0,float l=10,float a = 1,float am=50) :sourcePoint(s),
+	ElectricArc(Vector2f s = Vector2f(0, 0), float d = 0, float l = 10, float a = 1, float am = 50, bool p = true, float du=0,int f=0) : sourcePoint(s),
 	direction(d),
 	length(l),
 	arcThickness(a),
 	amplitude(am),
-	branchingProbability(0)
+	color(Color::White),
+	persistent(p),
+	duration(du),
+	fadingRate(f)
 	{
-		noiseGenerator.SetOctaveCount(8);
+		noiseGenerator.SetOctaveCount(5);
 		noiseGenerator.SetFrequency(2);
 		noiseGenerator.SetPersistence(0.5);
-		buildArc();
 	}
 	void buildArc();
-	void setBranchingProbability(int i) { branchingProbability = i; }
 	void setNoiseSeed(int i) { noiseGenerator.SetSeed(i); }
 	void draw(RenderWindow &window);
+	void update(float deltaTime);
 };
 
 void ElectricArc::buildArc()
@@ -51,6 +56,7 @@ void ElectricArc::buildArc()
 		arcPath.push_back(Vector2f(x, noiseGenerator.GetValue(x / Noise_X_Input_Dividend, Noise_Y_Input, 0) * amplitude));
 		x += 1;
 	}
+
 	Matrix rotationMatrix(cos(direction*Degree_To_Radian), -sin(direction*Degree_To_Radian), sin(direction*Degree_To_Radian), cos(direction*Degree_To_Radian));
 	for (int i = 0; i < arcPath.size(); ++i) {
 		arcPath[i] = rotationMatrix*arcPath[i] + sourcePoint;
@@ -79,11 +85,28 @@ void ElectricArc::draw(RenderWindow& window)
 		CircleShape c(arcThickness);
 		c.setOrigin(arcThickness, arcThickness);
 		c.setPosition(p);
-		c.setFillColor(Color(255,255,255));
-		c.setOutlineColor(Color::White);
+		c.setFillColor(color);
+		c.setOutlineColor(color);
 		window.draw(c);
 	}
+	//CircleShape c(20);
+	//c.setOrigin(20, 20);
+	//c.setPosition(arcPath[0]);
+	//c.setFillColor(Color::Red);
+	//c.setOutlineColor(Color::Red);
+	//window.draw(c);
 	for (shared_ptr<ElectricArc> a : branches)
 		a->draw(window);
 }
 
+void ElectricArc::update(float deltaTime)
+{
+	if(!persistent)
+	{
+		duration -= deltaTime;
+		if(duration<=0)
+		{
+			color = Color(color.r, color.g, color.b, color.a - fadingRate);
+		}
+	}
+}
