@@ -13,11 +13,22 @@ private:
 	Font font;
 	Display nextDisplay;
 	ElectricArc electricArc;
+	bool leftAlreadyPressed, rightAlreadyPressed;
+	CircleShape anode;
+	vector<CircleShape> cathodes;
+	void addCathode(Vector2i p);
+	void removeCathode(Vector2i p);
 public:
 	ContinuousDischarge(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
-	nextDisplay(Display::Continuous), electricArc(Vector2f(400, 100), 90, 600, 5, 0)
+	nextDisplay(Display::Continuous), electricArc(Vector2f(400, 100), 90, 600, 5, 0),
+	leftAlreadyPressed(false),
+	rightAlreadyPressed(false),
+	anode(Continuous_Anode_Radius)
 	{
 		srand(time(NULL));
+		anode.setOrigin(Continuous_Anode_Radius, Continuous_Anode_Radius);
+		anode.setPosition(Continuous_Anode_X, Continuous_Anode_Y);
+		anode.setFillColor(Color::Red);
 		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
 		electricArc.setAmplitude(amplitude);
 		electricArc.setNoiseSeed(rand());
@@ -37,14 +48,60 @@ public:
 		instruction2.setFillColor(Color::Red);
 		instruction2.setPosition(Menu_Instruction_X, Menu_Instruction_Y + 30);
 	}
-	virtual void processEvent(Event event) override;
+	virtual void processEvent(Event event, RenderWindow& window) override;
 	virtual void update(float deltaTime) override;
 	virtual void render(RenderWindow &window) override;
 	virtual Display next() override;
 };
 
-void ContinuousDischarge::processEvent(Event event)
+void ContinuousDischarge::addCathode(Vector2i p)
 {
+	CircleShape cathode(Continuous_Anode_Radius);
+	cathode.setOrigin(Continuous_Anode_Radius, Continuous_Anode_Radius);
+	cathode.setFillColor(Color::Blue);
+	cathode.setPosition(p.x,p.y);
+	cathodes.push_back(cathode);
+}
+
+void ContinuousDischarge::removeCathode(Vector2i p)
+{
+	for(vector<CircleShape>::reverse_iterator i=cathodes.rbegin();i!=cathodes.rend();++i)
+	{
+		float deltaX = i->getPosition().x - p.x, deltaY = i->getPosition().y - p.y;
+		float distanceSquared = deltaX*deltaX + deltaY*deltaY;
+		if(distanceSquared<Continuous_Anode_Radius*Continuous_Anode_Radius)
+		{
+			cathodes.erase(--(i.base()));
+			break;
+		}
+	}
+}
+
+void ContinuousDischarge::processEvent(Event event, RenderWindow& window)
+{
+	if (Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		if (!leftAlreadyPressed) {
+			addCathode(Mouse::getPosition(window));
+			leftAlreadyPressed = true;
+		}
+	}
+	else
+	{
+		leftAlreadyPressed = false;
+	}
+	if (Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		if (!rightAlreadyPressed)
+		{
+			removeCathode(Mouse::getPosition(window));
+			rightAlreadyPressed = true;
+		}
+	}
+	else
+	{
+		rightAlreadyPressed = false;
+	}
 	if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 		nextDisplay = Display::Menu;
 	}
@@ -58,6 +115,9 @@ void ContinuousDischarge::update(float deltaTime)
 void ContinuousDischarge::render(RenderWindow& window)
 {
 	electricArc.draw(window);
+	window.draw(anode);
+	for (CircleShape c : cathodes)
+		window.draw(c);
 	window.draw(instruction1);
 	window.draw(instruction2);
 }

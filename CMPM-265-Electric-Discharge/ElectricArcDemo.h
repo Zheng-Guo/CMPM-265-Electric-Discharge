@@ -35,13 +35,13 @@ public:
 		instruction2.setFillColor(Color::Red);
 		instruction2.setPosition(Menu_Instruction_X, Menu_Instruction_Y + 30);
 	}
-	virtual void processEvent(Event event) override;
+	virtual void processEvent(Event event, RenderWindow& window) override;
 	virtual void update(float deltaTime) override;
 	virtual void render(RenderWindow &window) override;
 	virtual Display next() override;
 };
 
-void ElectricArcDemo::processEvent(Event event)
+void ElectricArcDemo::processEvent(Event event, RenderWindow& window)
 {
 	if (Keyboard::isKeyPressed(Keyboard::Return)) {
 		electricArc.setNoiseSeed(rand());

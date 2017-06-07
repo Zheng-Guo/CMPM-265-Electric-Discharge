@@ -39,7 +39,7 @@ void ElectricDischarge::run()
 		{
 			if (event.type == Event::Closed)
 				window.close();
-			currentForm->processEvent(event);
+			currentForm->processEvent(event,window);
 			if (currentDisplay != currentForm->next())
 			{
 				currentDisplay = currentForm->next();
