@@ -50,6 +50,7 @@ public:
 	void setTargetPoint(Vector2f t) { targetPoint = t; }
 	void setContinuous(bool c) { continuous = c; }
 	void setBranching(bool b) { branching = b; }
+	Vector2f getTargetPoint() const { return targetPoint; }
 	void draw(RenderWindow &window);
 	void update(float deltaTime);
 	bool isVisible() const { return color.a > 0; }

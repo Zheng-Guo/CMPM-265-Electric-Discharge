@@ -9,18 +9,18 @@ using namespace std;
 class ContinuousDischarge: public Form
 {
 private:
-	Text instruction1, instruction2;
+	Text instruction1, instruction2,instruction3;
 	Font font;
 	Display nextDisplay;
-	ElectricArc electricArc;
 	bool leftAlreadyPressed, rightAlreadyPressed;
 	CircleShape anode;
 	vector<CircleShape> cathodes;
+	vector<shared_ptr<ElectricArc>> electricArcs;
 	void addCathode(Vector2i p);
 	void removeCathode(Vector2i p);
 public:
 	ContinuousDischarge(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
-	nextDisplay(Display::Continuous), electricArc(Vector2f(400, 100), 90, 600, 5, 0),
+	nextDisplay(Display::Continuous), 
 	leftAlreadyPressed(false),
 	rightAlreadyPressed(false),
 	anode(Continuous_Anode_Radius)
@@ -29,24 +29,22 @@ public:
 		anode.setOrigin(Continuous_Anode_Radius, Continuous_Anode_Radius);
 		anode.setPosition(Continuous_Anode_X, Continuous_Anode_Y);
 		anode.setFillColor(Color::Red);
-		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
-		electricArc.setAmplitude(amplitude);
-		electricArc.setNoiseSeed(rand());
-		electricArc.setContinuous(true);
-		electricArc.setTargetPoint(Vector2f(400, 600));
-		electricArc.setBranching(false);
-		electricArc.buildArc();
 		font.loadFromFile("Tinos-Regular.ttf");
 		instruction1.setFont(font);
-		instruction1.setString("Press Enter to generate another electric arc.");
+		instruction1.setString("Left click mouse anywhere on the screen to add an electrode.");
 		instruction1.setCharacterSize(Instruction_Character_Size);
 		instruction1.setFillColor(Color::Red);
 		instruction1.setPosition(Menu_Instruction_X, Menu_Instruction_Y);
 		instruction2.setFont(font);
-		instruction2.setString("Press Escape to return to menu.");
+		instruction2.setString("Right click on an electrode to remove it.");
 		instruction2.setCharacterSize(Instruction_Character_Size);
 		instruction2.setFillColor(Color::Red);
-		instruction2.setPosition(Menu_Instruction_X, Menu_Instruction_Y + 30);
+		instruction2.setPosition(Menu_Instruction_X, Menu_Instruction_Y+30);
+		instruction3.setFont(font);
+		instruction3.setString("Press Escape to return to menu.");
+		instruction3.setCharacterSize(Instruction_Character_Size);
+		instruction3.setFillColor(Color::Red);
+		instruction3.setPosition(Menu_Instruction_X, Menu_Instruction_Y + 60);
 	}
 	virtual void processEvent(Event event, RenderWindow& window) override;
 	virtual void update(float deltaTime) override;
@@ -61,6 +59,14 @@ void ContinuousDischarge::addCathode(Vector2i p)
 	cathode.setFillColor(Color::Blue);
 	cathode.setPosition(p.x,p.y);
 	cathodes.push_back(cathode);
+	shared_ptr<ElectricArc> e = make_shared<ElectricArc>(anode.getPosition(), 0, 0, 3, 0);
+	int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
+	e->setAmplitude(amplitude);
+	e->setNoiseSeed(rand());
+	e->setContinuous(true);
+	e->setTargetPoint(Vector2f(p.x,p.y));
+	e->buildArc();
+	electricArcs.push_back(e);
 }
 
 void ContinuousDischarge::removeCathode(Vector2i p)
@@ -71,6 +77,14 @@ void ContinuousDischarge::removeCathode(Vector2i p)
 		float distanceSquared = deltaX*deltaX + deltaY*deltaY;
 		if(distanceSquared<Continuous_Anode_Radius*Continuous_Anode_Radius)
 		{
+			for(int j=0;j<electricArcs.size();++j)
+			{
+				if(electricArcs[j]->getTargetPoint()==i->getPosition())
+				{
+					electricArcs.erase(electricArcs.begin() + j);
+					break;
+				}
+			}
 			cathodes.erase(--(i.base()));
 			break;
 		}
@@ -109,17 +123,20 @@ void ContinuousDischarge::processEvent(Event event, RenderWindow& window)
 
 void ContinuousDischarge::update(float deltaTime)
 {
-	electricArc.update(deltaTime);
+	for (shared_ptr<ElectricArc> e : electricArcs)
+		e->update(deltaTime);
 }
 
 void ContinuousDischarge::render(RenderWindow& window)
 {
-	electricArc.draw(window);
+	for (shared_ptr<ElectricArc> e : electricArcs)
+		e->draw(window);
 	window.draw(anode);
 	for (CircleShape c : cathodes)
 		window.draw(c);
 	window.draw(instruction1);
 	window.draw(instruction2);
+	window.draw(instruction3);
 }
 
 Display ContinuousDischarge::next()
