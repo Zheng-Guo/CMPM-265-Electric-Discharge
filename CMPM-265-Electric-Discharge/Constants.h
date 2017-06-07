@@ -3,7 +3,6 @@
 const int Window_Width = 800;
 const int Window_Height = 800;
 const float Noise_X_Input_Dividend = 200.f;
-const float Noise_Y_Input = 0.5f;
 const float Noise_Y_Invertal = 1.f;
 const float Branching_Angle_Base = 10.f;
 const int Branching_Angle_Margin = 20;

@@ -40,7 +40,6 @@ public:
 	yInput(0),
 	fadingRate(f)
 	{
-		srand(time(NULL));
 		noiseGenerator.SetOctaveCount(5);
 		noiseGenerator.SetFrequency(2);
 		noiseGenerator.SetPersistence(0.5);
@@ -130,7 +129,7 @@ void ElectricArc::buildArc()
 	{
 		while (x <= length)
 		{
-			arcPath.push_back(Vector2f(x, noiseGenerator.GetValue(x / Noise_X_Input_Dividend, Noise_Y_Input, 0) * amplitude));
+			arcPath.push_back(Vector2f(x, noiseGenerator.GetValue(x / Noise_X_Input_Dividend, 0, 0) * amplitude));
 			x += 1;
 		}
 
@@ -139,7 +138,7 @@ void ElectricArc::buildArc()
 			arcPath[i] = rotationMatrix*arcPath[i] + sourcePoint;
 
 			int p = rand() % Branching_Probability;
-			if (branching&&p == 0 && arcThickness>Branching_Threshold)
+			if (p == 0 && arcThickness>Branching_Threshold)
 			{
 				float branchDirection = rand() % Branching_Angle_Margin + Branching_Angle_Base;
 				branchDirection = branchDirection*(rand() % 2 == 0 ? 1 : -1);
