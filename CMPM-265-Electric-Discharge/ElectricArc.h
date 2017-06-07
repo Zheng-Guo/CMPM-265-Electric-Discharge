@@ -15,24 +15,27 @@ using namespace noise;
 class ElectricArc
 {
 private:
-	Vector2f sourcePoint;
+	Vector2f sourcePoint,targetPoint;
 	float direction, length;
 	vector<Vector2f> arcPath;
 	float arcThickness, amplitude;
 	vector<shared_ptr<ElectricArc>> branches;
 	Color color;
-	bool persistent;
+	bool persistent,continuous,branching;
 	float duration;
 	int fadingRate;
 	module::Perlin noiseGenerator;
 public:
 	ElectricArc(Vector2f s = Vector2f(0, 0), float d = 0, float l = 10, float a = 1, float am = 50, bool p = true, float du=0,int f=0) : sourcePoint(s),
+	targetPoint(s),
 	direction(d),
 	length(l),
 	arcThickness(a),
 	amplitude(am),
 	color(Color::White),
 	persistent(p),
+	continuous(false),
+	branching(true),
 	duration(du),
 	fadingRate(f)
 	{
@@ -43,6 +46,9 @@ public:
 	void buildArc();
 	void setNoiseSeed(int i) { noiseGenerator.SetSeed(i); }
 	void setAmplitude(float a) { amplitude = a; }
+	void setTargetPoint(Vector2f t) { targetPoint = t; }
+	void setContinuous(bool c) { continuous = c; }
+	void setBranching(bool b) { branching = b; }
 	void draw(RenderWindow &window);
 	void update(float deltaTime);
 	bool isVisible() const { return color.a > 0; }

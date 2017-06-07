@@ -30,6 +30,9 @@ public:
 		text.setString("Lightning Storm");
 		text.setPosition(Menu_Option_X, Menu_Option_Initial_Y + optionText.size()*Menu_Option_Interval);
 		optionText.push_back(text);
+		text.setString("Continuous Discharge");
+		text.setPosition(Menu_Option_X, Menu_Option_Initial_Y + optionText.size()*Menu_Option_Interval);
+		optionText.push_back(text);
 		instruction1.setFont(font);
 		instruction1.setString("Press Up/Down arrow key to select the display.");
 		instruction1.setCharacterSize(Instruction_Character_Size);
@@ -62,6 +65,8 @@ void MainMenu::processEvent(Event event)
 			nextDisplay = Display::Demo;
 		if (currentSelection == 1)
 			nextDisplay = Display::Storm;
+		if (currentSelection == 2)
+			nextDisplay = Display::Continuous;
 	}
 }
 
