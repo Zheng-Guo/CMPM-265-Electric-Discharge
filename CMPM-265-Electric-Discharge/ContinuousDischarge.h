@@ -15,12 +15,15 @@ private:
 	ElectricArc electricArc;
 public:
 	ContinuousDischarge(int windowWidth = 100, int windowHeight = 100) :Form(windowWidth, windowHeight),
-	nextDisplay(Display::Continuous), electricArc(Vector2f(400, 50), 90, 600, 5, 0)
+	nextDisplay(Display::Continuous), electricArc(Vector2f(400, 100), 90, 600, 5, 0)
 	{
 		srand(time(NULL));
 		int amplitude = rand() % Amplitude_Margin + Amplitude_Base;
 		electricArc.setAmplitude(amplitude);
 		electricArc.setNoiseSeed(rand());
+		electricArc.setContinuous(true);
+		electricArc.setTargetPoint(Vector2f(400, 600));
+		electricArc.setBranching(false);
 		electricArc.buildArc();
 		font.loadFromFile("Tinos-Regular.ttf");
 		instruction1.setFont(font);
@@ -49,7 +52,7 @@ void ContinuousDischarge::processEvent(Event event)
 
 void ContinuousDischarge::update(float deltaTime)
 {
-	
+	electricArc.update(deltaTime);
 }
 
 void ContinuousDischarge::render(RenderWindow& window)
