@@ -1,8 +1,6 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include <iostream>
-#include <cstdlib>
 #include <SFML/Graphics.hpp>
 #include <noise/noise.h>
 #include "Matrix.h"

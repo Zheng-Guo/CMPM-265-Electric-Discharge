@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include <cstdlib>
 #include <ctime>
 #include <SFML\Graphics.hpp>
 #include "MainMenu.h"
